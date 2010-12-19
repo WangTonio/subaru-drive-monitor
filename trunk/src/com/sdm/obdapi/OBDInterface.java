@@ -1,7 +1,7 @@
 package com.sdm.obdapi;
 
-interface OBDInterface {
+public interface OBDInterface {
 	
-	int getData(int addres);
+	int getData(int address);
 	
 }
