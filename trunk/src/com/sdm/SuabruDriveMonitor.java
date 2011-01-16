@@ -1,5 +1,7 @@
 package com.sdm;
 
+import java.util.HashMap;
+
 import com.sdm.manager.DataManager;
 import com.sdm.obdapi.FakeOBD;
 
@@ -21,58 +23,23 @@ public class SuabruDriveMonitor extends Activity {
 	private DataManager appService=null;
 	private TextView TempText =  null;
 	private Integer TempAddress = new Integer(5);
+	private String cycki = "";
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TempText = new TextView(this);
+        
         setContentView(TempText);
-        Intent cycki = new Intent(this, DataManager.class);
-        cycki.putExtra("address", TempAddress);
-        bindService(cycki,onService, BIND_AUTO_CREATE);
-
-    
-    
+        DataManager dataManager = new DataManager(this);
+        dataManager.execute();    
+        while(true){
+        	TempText.setText(cycki);
+        }
     }
-
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	registerReceiver(receiver,  new IntentFilter(DataManager.BROADCAST_ACTION));
-    }
-
-    @Override
-    public void onPause() {
-    	super.onPause();
-    	unregisterReceiver(receiver);
-    }
-
-    @Override
-    public void onDestroy() {
-    	super.onDestroy();
-    	unbindService(onService);
-    }
-
-    
-    private void updateContent() {
-    	TempText.setText(Integer.toString(appService.getData(TempAddress)));
-    }
-
- 
-
-    private BroadcastReceiver receiver=new BroadcastReceiver() {
-	    public void onReceive(Context context, Intent intent) {
-	     updateContent();
-	    }
-    };
-
-    private ServiceConnection onService=new ServiceConnection() {
-	    public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-	    	appService=((DataManager.LocalBinder)rawBinder).getService();
-	    }
-	
-	    public void onServiceDisconnected(ComponentName className) {
-	    	appService=null;
-	    }
-    };
+	public void message(HashMap<Integer, Integer> data) {
+		cycki = Integer.toString(data.get(1500));
+        
+//		TempText.setText(Integer.toString(data.get(1500)));
+	}
 }
