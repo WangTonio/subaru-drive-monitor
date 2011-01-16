@@ -5,8 +5,8 @@ import java.util.Random;
 public class FakeOBD implements OBDInterface{
 
 	private static final FakeOBD INSTANCE = new FakeOBD();
-	private int[] data = new int[256];
-	private boolean[] tred = new boolean[256];
+	private int[] data = new int[2048];
+	private boolean[] tred = new boolean[2048];
 	
     private FakeOBD() {
     }
