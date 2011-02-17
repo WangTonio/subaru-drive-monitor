@@ -1,39 +1,45 @@
 package com.sdm.manager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import android.app.Activity;
-import android.app.Service;
-import android.content.Intent;
+import java.util.HashSet;
+import java.util.Set;
 import android.os.AsyncTask;
-import android.os.Binder;
-import android.os.IBinder;
+import android.util.Log;
 
-import com.sdm.SuabruDriveMonitor;
+import com.graphics.Chart;
 import com.sdm.obdapi.*;
 
 public class DataManager extends AsyncTask<String, Void, Boolean>  {
-	public static final String BROADCAST_ACTION="com.sdm.SuabruDriveMonitor";
 	
-	
-	private ArrayList<Integer> addressList = new ArrayList<Integer>();
-	private HashMap<Integer, Integer> data = new HashMap<Integer, Integer>();
+	public Set<Sensor> sensors = new HashSet<Sensor>();
 	private OBDInterface OBD = FakeOBD.getInstance();
-	
-	private Activity activity;
-	public DataManager(Activity activity){
-		this.activity = activity;
-		addressList.add(1500);
+	private Chart chart;
+
+	public DataManager(Chart chart) {
+		this.chart = chart;
+	}
+	public void registerSensor(Sensor sensor){
+		sensors.add(sensor);
 	}
 	
 	@Override
 	protected Boolean doInBackground(String... params) {
-		while(true){
-	        for(Integer address : addressList){
-	        	data.put(address, OBD.getData(address));
-	        	 ((SuabruDriveMonitor) activity).message(data);
+		for(int i = 10 ; i < 100 ; i += 10){
+			try {
+				Thread.sleep(110);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        for(Sensor sensor : sensors){
+	        	sensor.setValue(OBD.getData(sensor.getAdress()));
+	        	
 	        }
+	       // chart.invalidate();
+	     
 		}
+		return true;
+	}
+	public void logError(){
+		Log.e("thread", "log");
 	}
 }
