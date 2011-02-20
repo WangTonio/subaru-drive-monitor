@@ -1,8 +1,12 @@
 package com.graphics;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.SynchronousQueue;
+
+import com.sdm.manager.Sensor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,12 +33,12 @@ public class Chart extends View {
 	private int gridY = 10;
 	private int maxValue = 100;
 	private int minValue = 0;
-	
+	private Sensor sensor;
 	int width = 0;
 	int height = 0;
 	int frame = 10;
 	int grid = 50;
-	public Queue<Integer> values = new LinkedList<Integer>();
+	public ArrayList<Integer> values = new ArrayList<Integer>();
     public Chart(Context context) {
         super(context);
         
@@ -67,12 +71,11 @@ public class Chart extends View {
         int end = frame;
         int begin = frame;
         int current = frame;
-        for(Integer value : values){
-        	end = value;
+        for(Integer value : getValues()){
+        	end = value + 100;
         	canvas.drawLine(current, begin, current + 1, end, paint);
         	current += 1;
         	begin = end;
-        	
         }
     }
     private void drawGrid(Canvas canvas){
@@ -103,9 +106,16 @@ public class Chart extends View {
         return paint;
     }
 
-	public void setValues(int i) {
+	public synchronized void setValues(int i) {
 		values.add(i);
-		Log.i("value",Integer.toString(i));// TODO Auto-generated method stub
+		//Log.i("value",Integer.toString(i));// TODO Auto-generated method stub
+		
+	}
+	public synchronized ArrayList<Integer> getValues() {
+		return (ArrayList<Integer>) values.clone();
+	}
+	public void addSensor(Sensor sensor){
+		this.sensor = sensor;
 		
 	}
 }

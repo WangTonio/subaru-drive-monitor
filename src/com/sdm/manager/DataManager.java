@@ -23,9 +23,9 @@ public class DataManager extends AsyncTask<String, Void, Boolean>  {
 	
 	@Override
 	protected Boolean doInBackground(String... params) {
-		for(int i = 10 ; i < 100 ; i += 10){
+		for(int i = 10 ; i < 2000 ; i += 10){
 			try {
-				Thread.sleep(110);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -34,7 +34,7 @@ public class DataManager extends AsyncTask<String, Void, Boolean>  {
 	        	sensor.setValue(OBD.getData(sensor.getAdress()));
 	        	
 	        }
-	       // chart.invalidate();
+	      
 	     
 		}
 		return true;
