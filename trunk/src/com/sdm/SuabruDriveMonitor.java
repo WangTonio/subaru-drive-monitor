@@ -37,22 +37,25 @@ public class SuabruDriveMonitor extends Activity {
         TempText = new Chart(this);
         Log.i("cycki","dupa");
         setContentView(TempText);
-       // DataManager dataManager = new DataManager(TempText);
-       // dataManager.execute();   
+        DataManager dataManager = new DataManager(TempText);
+        final Sensor sensor = new Sensor(1500);
+        dataManager.registerSensor(sensor);
+        
+        dataManager.execute();
         new Thread(new Runnable() {
             public void run() {
-            	for (int i = 10; i < 100; i++) {
+            	for (int i = 10; i < 500; i++) {
 					
 				
             	try {
-    				Thread.sleep(1);
+    				Thread.sleep(10);
     			} catch (InterruptedException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();
     			}
     			
     		        	
-    				TempText.setValues(i);
+    				TempText.setValues(sensor.getValue());
     				
             }
             }
