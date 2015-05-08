@@ -1,0 +1,1 @@
+It's a software for monitoring and loging all engine parameters during ride is Subaru with OBD interface.
